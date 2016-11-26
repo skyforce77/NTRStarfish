@@ -1,11 +1,14 @@
 package fr.skyforce77.ntrsf.network;
 
+import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Calendar;
 
 public class OutThread extends Thread {
 	
 	private OutputStream stream;
 	private NetworkManager manager;
+	private long nextHeartbeat = 0L;
 	
 	public OutThread(NetworkManager manager, OutputStream stream) {
 		this.manager = manager;
@@ -14,7 +17,25 @@ public class OutThread extends Thread {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		while(manager.isConnected()) {
+			try {
+				if(nextHeartbeat < Calendar.getInstance().getTimeInMillis()) {
+					stream.write(new NTRPacket(NTRPacketType.HEARTBEAT, null, null).serialize());
+					stream.flush();
+					nextHeartbeat = Calendar.getInstance().getTimeInMillis()+1000L;
+				}
+				NTRPacket packet;
+				while((packet = manager.waiting.poll()) != null) {
+					stream.write(packet.serialize());
+					stream.flush();
+				}
+				Thread.sleep(10L);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		super.run();
 	}
 
