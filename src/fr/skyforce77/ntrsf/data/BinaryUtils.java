@@ -12,9 +12,9 @@ public class BinaryUtils {
 	
 	public static long getUnsigned(byte[] bytes, int offset) {
 		long convert = Byte.toUnsignedInt(bytes[offset]);
-        convert |= Byte.toUnsignedInt(bytes[offset+1]) << 8;
-        convert |= Byte.toUnsignedInt(bytes[offset+2]) << 16;
-        convert |= Byte.toUnsignedInt(bytes[offset+3]) << 24;
+		convert |= Byte.toUnsignedInt(bytes[offset+1]) << 8;
+		convert |= Byte.toUnsignedInt(bytes[offset+2]) << 16;
+		convert |= Byte.toUnsignedInt(bytes[offset+3]) << 24;
 		return convert;
 	}
 	
