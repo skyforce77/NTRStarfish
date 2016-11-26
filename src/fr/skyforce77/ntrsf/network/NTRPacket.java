@@ -39,6 +39,10 @@ public class NTRPacket {
 		this.sequence = sequence;
 	}
 
+	public NTRPacketType getPacketType() {
+		return NTRPacketType.byIds(type, command);
+	}
+	
 	public long getType() {
 		return type;
 	}

@@ -21,6 +21,8 @@ public class NetworkManager {
 	public NetworkManager() {
 		waiting = new LinkedBlockingQueue<NTRPacket>();
 		listeners = new Vector<NTRPacketListener>();
+		
+		listeners.add(new InternalPacketListener());
 	}
 	
 	public void start(String ip, int port) {
