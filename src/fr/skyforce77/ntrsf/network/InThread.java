@@ -27,6 +27,7 @@ public class InThread extends Thread {
 				if(magic != NetworkManager.MAGIC) {
 					manager.stop();
 					System.err.println("Bad magic !");
+					break;
 				}
 				
 				long sequence = BinaryUtils.getUnsigned(buf, offset+=4);
@@ -41,9 +42,9 @@ public class InThread extends Thread {
 				int dataLen = (int)BinaryUtils.getUnsigned(buf, offset+=4);
 				byte[] data = new byte[dataLen];
 				if(dataLen != 0)
-					stream.read(data, 0, dataLen);
+					stream.read(data);
 				
-				NTRPacket packet = new NTRPacket(NTRPacketType.byIds(type, command), sequence, args, data);
+				NTRPacket packet = new NTRPacket(type, command, sequence, args, data);
 				
 				for(NTRPacketListener listener : manager.listeners) {
 					listener.onPacketReceived(packet);

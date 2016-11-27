@@ -2,8 +2,10 @@ package fr.skyforce77.ntrsf.network;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import fr.skyforce77.ntrsf.data.BinaryUtils;
+import fr.skyforce77.ntrsf.data.CosmicBuffer;
 
 public class NTRPacket {
 	
@@ -14,21 +16,36 @@ public class NTRPacket {
 	private long type;
 	private long command;
 	private long[] arguments;
-	private byte[] data;
+	private CosmicBuffer data;
 	
 	public NTRPacket(NTRPacketType type, long[] arguments, byte[] data) {
 		this.type = type.getType();
 		this.command = type.getCommand();
 		this.arguments = arguments;
-		this.data = data;
+		this.data = new CosmicBuffer(data);
 	}
 	
 	public NTRPacket(NTRPacketType type, long sequence, long[] arguments, byte[] data) {
 		this.type = type.getType();
-		this.sequence = sequence;
 		this.command = type.getCommand();
+		this.sequence = sequence;
 		this.arguments = arguments;
-		this.data = data;
+		this.data = new CosmicBuffer(data);
+	}
+	
+	public NTRPacket(long type, long command, long[] arguments, byte[] data) {
+		this.type = type;
+		this.command = command;
+		this.arguments = arguments;
+		this.data = new CosmicBuffer(data);
+	}
+	
+	public NTRPacket(long type, long command, long sequence, long[] arguments, byte[] data) {
+		this.type = type;
+		this.command = command;
+		this.sequence = sequence;
+		this.arguments = arguments;
+		this.data = new CosmicBuffer(data);
 	}
 
 	public long getSequence() {
@@ -67,12 +84,12 @@ public class NTRPacket {
 		this.arguments = arguments;
 	}
 
-	public byte[] getData() {
+	public CosmicBuffer getData() {
 		return data;
 	}
 
 	public void setData(byte[] data) {
-		this.data = data;
+		this.data = new CosmicBuffer(data);
 	}
 	
 	public byte[] serialize() {
@@ -96,12 +113,8 @@ public class NTRPacket {
 			}
 			
 			if(data != null) {
-				stream.write(BinaryUtils.toUnsignedBytes(data.length));
-				try {
-					stream.write(data);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				stream.write(BinaryUtils.toUnsignedBytes(data.length()));
+				data.copy(stream);
 			} else {
 				stream.write(BinaryUtils.toUnsignedBytes(0));
 			}
@@ -111,8 +124,21 @@ public class NTRPacket {
 		
 		return stream.toByteArray();
 	}
-
-	public void send() {
-		
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder("NTRPacket(Sequence: ");
+		builder.append(sequence);
+		builder.append(", Type: ");
+		builder.append(type);
+		builder.append(", Command: ");
+		builder.append(command);
+		builder.append(", Args: ");
+		builder.append(Arrays.toString(arguments));
+		builder.append(", DataLength: ");
+		builder.append(data.length());
+		builder.append(" )");
+		return builder.toString();
 	}
+	
 }
