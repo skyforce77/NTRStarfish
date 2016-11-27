@@ -1,21 +1,26 @@
 package fr.skyforce77.ntrsf;
 
+import fr.skyforce77.ntrsf.api.PluginManager;
 import fr.skyforce77.ntrsf.network.NetworkManager;
 
 public class Starfish {
 	
-	private NetworkManager manager;
+	private static NetworkManager networkManager;
+	private static PluginManager pluginManager;
 	
-	public Starfish() {
-		manager = new NetworkManager();
+	public static NetworkManager getNetworkManager() {
+		return networkManager;
 	}
-	
-	public void start() {
-		manager.start("192.168.0.53", 8000);
+
+	public static PluginManager getPluginManager() {
+		return pluginManager;
 	}
-	
+
 	public static void main(String[] args) {
-		new Starfish().start();
+		networkManager = new NetworkManager();
+		networkManager.start("192.168.0.53", 8000);
+		
+		pluginManager = new PluginManager();
 	}
 
 }
