@@ -3,6 +3,9 @@ package fr.skyforce77.ntrsf.network;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ConnectException;
+import java.net.InetSocketAddress;
+import java.net.NoRouteToHostException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -25,18 +28,21 @@ public class NetworkManager {
 		listeners.add(new InternalPacketListener());
 	}
 	
-	public void start(String ip, int port) {
+	public boolean start(String ip, int port) {
 		try {
-			s = new Socket(ip, port);
+			s = new Socket();
 			
-			while(!s.isConnected()) {
-				try {
-					Thread.sleep(10L);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			try {
+				s.connect(new InetSocketAddress(ip, port), 5000);
+			} catch(ConnectException e) {
+				return false;
+			} catch(NoRouteToHostException e) {
+				return false;
 			}
-			System.out.println("Connected");
+			
+			if(!s.isConnected()) {
+				return false;
+			}
 			
 			InputStream is = s.getInputStream();
 			new InThread(this, is).start();
@@ -48,6 +54,7 @@ public class NetworkManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return true;
 	}
 	
 	public void stop() {
