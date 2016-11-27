@@ -10,15 +10,18 @@ import java.util.Map.Entry;
 import fr.skyforce77.ntrsf.api.event.Event;
 import fr.skyforce77.ntrsf.api.event.EventHandler;
 import fr.skyforce77.ntrsf.api.event.Listener;
+import fr.skyforce77.ntrsf.log.NTRLogger;
 
 public class PluginManager {
 	
 	private List<Plugin> plugins;
 	private Map<Class<? extends Event>, List<ListenerMethod>> listeners;
+	private Map<String, Command> commands;
 	
 	public PluginManager() {
 		plugins = new LinkedList<Plugin>();
 		listeners = new LinkedHashMap<Class<? extends Event>, List<ListenerMethod>>();
+		commands = new LinkedHashMap<String, Command>();
 	}
 	
 	public List<Plugin> getPlugins() {
@@ -56,6 +59,30 @@ public class PluginManager {
 				method.call(event);
 			}
 		}
+	}
+	
+	public void registerCommand(Command command) {
+		for(String label : command.getLabel()) {
+			commands.put(label, command);
+		}
+	}
+	
+	public void registerCommands(Command... commands) {
+		for(Command command : commands) {
+			registerCommand(command);
+		}
+	}
+	
+	public void callCommand(String label, String[] args) {
+		if(commands.containsKey(label)) {
+			commands.get(label).onCommand(label, args);
+		} else {
+			NTRLogger.println("Unknown command ! Type 'help' for help");
+		}
+	}
+
+	public Map<String, Command> getCommands() {
+		return commands;
 	}
 
 }

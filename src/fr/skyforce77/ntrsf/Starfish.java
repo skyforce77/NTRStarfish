@@ -4,8 +4,12 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import fr.skyforce77.ntrsf.api.PluginManager;
+import fr.skyforce77.ntrsf.commands.CommandHello;
+import fr.skyforce77.ntrsf.commands.CommandHelp;
+import fr.skyforce77.ntrsf.commands.CommandProcesses;
 import fr.skyforce77.ntrsf.data.DataManager;
 import fr.skyforce77.ntrsf.network.NetworkManager;
+import fr.skyforce77.ntrsf.ui.StarfishWindow;
 
 public class Starfish {
 	
@@ -63,6 +67,14 @@ public class Starfish {
 		}
 		
 		pluginManager = new PluginManager();
+		
+		pluginManager.registerCommands(
+				new CommandHelp(),
+				new CommandHello(),
+				new CommandProcesses()
+		);
+		
+		new StarfishWindow();
 	}
 
 }

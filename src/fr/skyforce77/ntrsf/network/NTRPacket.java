@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 
+import fr.skyforce77.ntrsf.Starfish;
 import fr.skyforce77.ntrsf.data.BinaryUtils;
 import fr.skyforce77.ntrsf.data.CosmicBuffer;
 
@@ -145,6 +146,10 @@ public class NTRPacket {
 
 	public void setData(byte[] data) {
 		this.data = new CosmicBuffer(data);
+	}
+	
+	public void send() {
+		Starfish.getNetworkManager().send(this);
 	}
 	
 	public byte[] serialize() {
