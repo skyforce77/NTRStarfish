@@ -18,6 +18,30 @@ public class NTRPacket {
 	private long[] arguments;
 	private CosmicBuffer data;
 	
+	public NTRPacket(NTRPacketType type) {
+		this.type = type.getType();
+		this.command = type.getCommand();
+	}
+	
+	public NTRPacket(NTRPacketType type, long[] arguments) {
+		this.type = type.getType();
+		this.command = type.getCommand();
+		this.arguments = arguments;
+	}
+	
+	public NTRPacket(NTRPacketType type, long sequence) {
+		this.type = type.getType();
+		this.command = type.getCommand();
+		this.sequence = sequence;
+	}
+	
+	public NTRPacket(NTRPacketType type, long sequence, long[] arguments) {
+		this.type = type.getType();
+		this.command = type.getCommand();
+		this.sequence = sequence;
+		this.arguments = arguments;
+	}
+	
 	public NTRPacket(NTRPacketType type, long[] arguments, byte[] data) {
 		this.type = type.getType();
 		this.command = type.getCommand();
@@ -46,6 +70,36 @@ public class NTRPacket {
 		this.sequence = sequence;
 		this.arguments = arguments;
 		this.data = new CosmicBuffer(data);
+	}
+	
+	public NTRPacket(NTRPacketType type, long[] arguments, CosmicBuffer data) {
+		this.type = type.getType();
+		this.command = type.getCommand();
+		this.arguments = arguments;
+		this.data = data;
+	}
+	
+	public NTRPacket(NTRPacketType type, long sequence, long[] arguments, CosmicBuffer data) {
+		this.type = type.getType();
+		this.command = type.getCommand();
+		this.sequence = sequence;
+		this.arguments = arguments;
+		this.data = data;
+	}
+	
+	public NTRPacket(long type, long command, long[] arguments, CosmicBuffer data) {
+		this.type = type;
+		this.command = command;
+		this.arguments = arguments;
+		this.data = data;
+	}
+	
+	public NTRPacket(long type, long command, long sequence, long[] arguments, CosmicBuffer data) {
+		this.type = type;
+		this.command = command;
+		this.sequence = sequence;
+		this.arguments = arguments;
+		this.data = data;
 	}
 
 	public long getSequence() {

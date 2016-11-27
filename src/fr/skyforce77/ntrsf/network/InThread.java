@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import fr.skyforce77.ntrsf.data.BinaryUtils;
+import fr.skyforce77.ntrsf.data.CosmicBuffer;
 
 public class InThread extends Thread {
 	
@@ -40,9 +41,9 @@ public class InThread extends Thread {
 				}
 				
 				int dataLen = (int)BinaryUtils.getUnsigned(buf, offset+=4);
-				byte[] data = new byte[dataLen];
+				CosmicBuffer data = new CosmicBuffer();
 				if(dataLen != 0)
-					stream.read(data);
+					data.fill(stream, dataLen);
 				
 				NTRPacket packet = new NTRPacket(type, command, sequence, args, data);
 				
