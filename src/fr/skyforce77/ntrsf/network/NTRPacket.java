@@ -2,6 +2,7 @@ package fr.skyforce77.ntrsf.network;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
 
 import fr.skyforce77.ntrsf.data.BinaryUtils;
@@ -16,7 +17,7 @@ public class NTRPacket {
 	private long type;
 	private long command;
 	private long[] arguments;
-	private CosmicBuffer data;
+	private CosmicBuffer data = new CosmicBuffer();
 	
 	public NTRPacket(NTRPacketType type) {
 		this.type = type.getType();
@@ -147,8 +148,12 @@ public class NTRPacket {
 	}
 	
 	public byte[] serialize() {
-		ByteArrayOutputStream stream = new ByteArrayOutputStream(84);
-		
+		ByteArrayOutputStream stream = new ByteArrayOutputStream(84+data.length());
+		serialize(stream);
+		return stream.toByteArray();
+	}
+	
+	public void serialize(OutputStream stream) {
 		try {
 			stream.write(MAGIC);
 			
@@ -175,8 +180,6 @@ public class NTRPacket {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		return stream.toByteArray();
 	}
 	
 	@Override

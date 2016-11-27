@@ -46,7 +46,10 @@ public class CosmicBuffer {
 				buff = new byte[length-o];
 			}
 			try {
-				stream.read(buff);
+				int len = 0;
+				while(len != buff.length) {
+					len+=stream.read(buff, len, buff.length-len);
+				}
 				parts.add(buff);
 				o+=buff.length;
 			} catch (IOException e) {

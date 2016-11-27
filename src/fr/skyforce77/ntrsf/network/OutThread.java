@@ -20,13 +20,13 @@ public class OutThread extends Thread {
 		while(manager.isConnected()) {
 			try {
 				if(nextHeartbeat < Calendar.getInstance().getTimeInMillis()) {
-					stream.write(new NTRPacket(NTRPacketType.HEARTBEAT, null, null).serialize());
+					stream.write(new NTRPacket(NTRPacketType.HEARTBEAT).serialize());
 					stream.flush();
 					nextHeartbeat = Calendar.getInstance().getTimeInMillis()+1000L;
 				}
 				NTRPacket packet;
 				while((packet = manager.waiting.poll()) != null) {
-					stream.write(packet.serialize());
+					packet.serialize(stream);
 					stream.flush();
 				}
 				Thread.sleep(10L);
