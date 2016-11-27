@@ -6,6 +6,8 @@ import java.util.Calendar;
 
 public class OutThread extends Thread {
 	
+	private static NTRPacket HEARTBEAT = new NTRPacket(NTRPacketType.HEARTBEAT);
+	
 	private OutputStream stream;
 	private NetworkManager manager;
 	private long nextHeartbeat = 0L;
@@ -20,7 +22,7 @@ public class OutThread extends Thread {
 		while(manager.isConnected()) {
 			try {
 				if(nextHeartbeat < Calendar.getInstance().getTimeInMillis()) {
-					stream.write(new NTRPacket(NTRPacketType.HEARTBEAT).serialize());
+					HEARTBEAT.serialize(stream);
 					stream.flush();
 					nextHeartbeat = Calendar.getInstance().getTimeInMillis()+1000L;
 				}
