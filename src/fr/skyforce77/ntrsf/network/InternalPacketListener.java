@@ -9,7 +9,7 @@ class InternalPacketListener implements NTRPacketListener {
 
 	@Override
 	public void onPacketReceived(NTRPacket packet) {
-		//System.out.println(packet);
+		System.out.println(packet);
 		if(packet.getPacketType() == NTRPacketType.HEARTBEAT) {
 			if(packet.getData().length() != 0) {
 				String ret = new String(packet.getData().toArray(), Charset.forName("UTF-8"));
@@ -18,11 +18,23 @@ class InternalPacketListener implements NTRPacketListener {
 				}
 			}
 		}
+		ResponseListener listener = Starfish.getNetworkManager().recover(packet);
+		if(listener != null) {
+			listener.received(packet);
+		}
 	}
 	
 	public boolean analyse(NTRPacket packet, String ret) {
-		if(ret.startsWith("pid:")) {
-			Starfish.getConsoleManager().updateProcesses(packet, ret);
+		if(ret.contains("pid:") && ret.contains("end of process list.")) {
+			int i = ret.indexOf("pid:");
+			int j = ret.indexOf("end of process list.");
+			Starfish.getConsoleManager().updateProcesses(packet, ret.substring(i, j));
+			if(i != 0) {
+				NTRLogger.println(ret.substring(0, i));
+			}
+			if(j+20 <= ret.length()-1) {
+				NTRLogger.println(ret.substring(j+20, ret.length()-1));
+			}
 			return false;
 		}
 		return true;

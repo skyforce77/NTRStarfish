@@ -7,6 +7,7 @@ import fr.skyforce77.ntrsf.Starfish;
 import fr.skyforce77.ntrsf.api.event.process.ProcessStartedEvent;
 import fr.skyforce77.ntrsf.api.event.process.ProcessStoppedEvent;
 import fr.skyforce77.ntrsf.network.NTRPacket;
+import fr.skyforce77.ntrsf.network.NTRPacketReadMemory;
 
 public class ConsoleManager {
 	
@@ -18,6 +19,12 @@ public class ConsoleManager {
 	
 	public List<ConsoleProcess> getProcesses() {
 		return processes;
+	}
+	
+	public void requestMemory(long pid, long address, long size, MemoryResponse reponse) {
+		NTRPacket packet = new NTRPacketReadMemory(pid, address, size);
+		Starfish.getNetworkManager().registerResponseListener(packet, new MemoryCallback(reponse));
+		packet.send();
 	}
 
 	public void updateProcesses(NTRPacket packet, String ret) {

@@ -1,6 +1,8 @@
 package fr.skyforce77.ntrsf.commands;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 import fr.skyforce77.ntrsf.Starfish;
 import fr.skyforce77.ntrsf.api.Command;
@@ -21,7 +23,8 @@ public class CommandHelp extends Command {
 	@Override
 	public void onCommand(String label, String[] args) {
 		NTRLogger.println("---- Commands ----");
-		for(Command command : Starfish.getPluginManager().getCommands().values()) {
+		Collection<Command> values = new HashSet<Command>(Starfish.getPluginManager().getCommands().values());
+		for(Command command : values) {
 			if(command.getLabel().length == 1) {
 				NTRLogger.print(command.getLabel()[0]);
 			} else {

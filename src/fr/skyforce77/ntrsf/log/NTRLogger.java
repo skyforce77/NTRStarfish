@@ -27,5 +27,9 @@ public class NTRLogger {
 		if(pane != null)
 			pane.setText(pane.getText()+message+"\n");
 	}
+	
+	public static void clear() {
+		pane.setText("");
+	}
 
 }

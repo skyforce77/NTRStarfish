@@ -26,12 +26,12 @@ public class OutThread extends Thread {
 				if(nextHeartbeat < Calendar.getInstance().getTimeInMillis()) {
 					stream.write(HEARTBEAT);
 					stream.flush();
-					nextHeartbeat = Calendar.getInstance().getTimeInMillis()+1000L;
+					nextHeartbeat = Calendar.getInstance().getTimeInMillis()+5000L;
 				}
 				if(nextProcessList < Calendar.getInstance().getTimeInMillis()) {
 					stream.write(LIST_PROCESSES);
 					stream.flush();
-					nextProcessList = Calendar.getInstance().getTimeInMillis()+10000L;
+					nextProcessList = Calendar.getInstance().getTimeInMillis()+20000L;
 				}
 				NTRPacket packet;
 				while((packet = manager.waiting.poll()) != null) {

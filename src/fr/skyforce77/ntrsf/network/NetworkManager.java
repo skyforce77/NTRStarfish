@@ -8,7 +8,9 @@ import java.net.InetSocketAddress;
 import java.net.NoRouteToHostException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Vector;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -20,10 +22,13 @@ public class NetworkManager {
 	Queue<NTRPacket> waiting;
 	List<NTRPacketListener> listeners;
 	private Socket s;
+	private long sequence = 0l;
+	private Map<Long, ResponseListener> callbacks;
 	
 	public NetworkManager() {
 		waiting = new LinkedBlockingQueue<NTRPacket>();
 		listeners = new Vector<NTRPacketListener>();
+		callbacks = new LinkedHashMap<Long, ResponseListener>();
 		
 		listeners.add(new InternalPacketListener());
 	}
@@ -55,6 +60,23 @@ public class NetworkManager {
 			e.printStackTrace();
 		}
 		return true;
+	}
+	
+	public Long lockSequenceNumber() {
+		return sequence++;
+	}
+	
+	public void registerResponseListener(NTRPacket packet, ResponseListener listener) {
+		callbacks.put(packet.getSequence(), listener);
+	}
+	
+	public ResponseListener recover(NTRPacket packet) {
+		if(callbacks.containsKey(packet.getSequence())) {
+			ResponseListener callback = callbacks.get(packet.getSequence());
+			callbacks.remove(packet.getSequence());
+			return callback;
+		}
+		return null;
 	}
 	
 	public void stop() {

@@ -14,7 +14,7 @@ public class NTRPacket {
 	private static byte[] MAGIC = BinaryUtils.toUnsignedBytes(NetworkManager.MAGIC);
 	private static byte[] ZERO = BinaryUtils.toUnsignedBytes(0x00000000);
 	
-	private long sequence = 0;
+	private long sequence = Starfish.getNetworkManager().lockSequenceNumber();
 	private long type;
 	private long command;
 	private long[] arguments;
@@ -169,7 +169,7 @@ public class NTRPacket {
 			stream.write(BinaryUtils.toUnsignedBytes(command));
 			
 			for (int i = 0; i < 16; i++) {
-				if(arguments != null) {
+				if(arguments != null && arguments.length > i) {
 					stream.write(BinaryUtils.toUnsignedBytes(arguments[i]));
 				} else {
 					stream.write(ZERO);

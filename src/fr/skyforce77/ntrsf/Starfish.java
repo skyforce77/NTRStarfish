@@ -4,9 +4,11 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import fr.skyforce77.ntrsf.api.PluginManager;
+import fr.skyforce77.ntrsf.commands.CommandExit;
 import fr.skyforce77.ntrsf.commands.CommandHello;
 import fr.skyforce77.ntrsf.commands.CommandHelp;
 import fr.skyforce77.ntrsf.commands.CommandProcesses;
+import fr.skyforce77.ntrsf.commands.CommandReadMemory;
 import fr.skyforce77.ntrsf.console.ConsoleManager;
 import fr.skyforce77.ntrsf.data.DataManager;
 import fr.skyforce77.ntrsf.network.NetworkManager;
@@ -78,7 +80,9 @@ public class Starfish {
 		pluginManager.registerCommands(
 				new CommandHelp(),
 				new CommandHello(),
-				new CommandProcesses()
+				new CommandProcesses(),
+				new CommandReadMemory(),
+				new CommandExit()
 		);
 		
 		new StarfishWindow();
