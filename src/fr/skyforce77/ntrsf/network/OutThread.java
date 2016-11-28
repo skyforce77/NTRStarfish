@@ -7,10 +7,12 @@ import java.util.Calendar;
 public class OutThread extends Thread {
 	
 	private static byte[] HEARTBEAT = new NTRPacket(NTRPacketType.HEARTBEAT).serialize();
+	private static byte[] LIST_PROCESSES = new NTRPacket(NTRPacketType.LIST_PROCESSES).serialize();
 	
 	private OutputStream stream;
 	private NetworkManager manager;
 	private long nextHeartbeat = 0L;
+	private long nextProcessList = 0L;
 	
 	public OutThread(NetworkManager manager, OutputStream stream) {
 		this.manager = manager;
@@ -25,6 +27,11 @@ public class OutThread extends Thread {
 					stream.write(HEARTBEAT);
 					stream.flush();
 					nextHeartbeat = Calendar.getInstance().getTimeInMillis()+1000L;
+				}
+				if(nextProcessList < Calendar.getInstance().getTimeInMillis()) {
+					stream.write(LIST_PROCESSES);
+					stream.flush();
+					nextProcessList = Calendar.getInstance().getTimeInMillis()+10000L;
 				}
 				NTRPacket packet;
 				while((packet = manager.waiting.poll()) != null) {

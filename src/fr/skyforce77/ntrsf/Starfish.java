@@ -7,6 +7,7 @@ import fr.skyforce77.ntrsf.api.PluginManager;
 import fr.skyforce77.ntrsf.commands.CommandHello;
 import fr.skyforce77.ntrsf.commands.CommandHelp;
 import fr.skyforce77.ntrsf.commands.CommandProcesses;
+import fr.skyforce77.ntrsf.console.ConsoleManager;
 import fr.skyforce77.ntrsf.data.DataManager;
 import fr.skyforce77.ntrsf.network.NetworkManager;
 import fr.skyforce77.ntrsf.ui.StarfishWindow;
@@ -16,6 +17,7 @@ public class Starfish {
 	private static NetworkManager networkManager;
 	private static PluginManager pluginManager;
 	private static DataManager dataManager;
+	private static ConsoleManager consoleManager;
 	
 	public static NetworkManager getNetworkManager() {
 		return networkManager;
@@ -28,9 +30,14 @@ public class Starfish {
 	public static DataManager getDataManager() {
 		return dataManager;
 	}
+	
+	public static ConsoleManager getConsoleManager() {
+		return consoleManager;
+	}
 
 	public static void main(String[] args) {
 		networkManager = new NetworkManager();
+		consoleManager = new ConsoleManager();
 		dataManager = new DataManager();
 		dataManager.init();
 		

@@ -1,8 +1,9 @@
 package fr.skyforce77.ntrsf.commands;
 
+import fr.skyforce77.ntrsf.Starfish;
 import fr.skyforce77.ntrsf.api.Command;
-import fr.skyforce77.ntrsf.network.NTRPacket;
-import fr.skyforce77.ntrsf.network.NTRPacketType;
+import fr.skyforce77.ntrsf.console.ConsoleProcess;
+import fr.skyforce77.ntrsf.log.NTRLogger;
 
 public class CommandProcesses extends Command {
 
@@ -18,7 +19,9 @@ public class CommandProcesses extends Command {
 
 	@Override
 	public void onCommand(String label, String[] args) {
-		new NTRPacket(NTRPacketType.LIST_PROCESSES).send();
+		for(ConsoleProcess p : Starfish.getConsoleManager().getProcesses()) {
+			NTRLogger.println(p);
+		}
 	}
 
 }

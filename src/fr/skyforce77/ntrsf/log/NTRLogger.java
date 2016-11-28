@@ -10,12 +10,22 @@ public class NTRLogger {
 		pane = pan;
 	}
 	
+	public static void print(Object object) {
+		print(object.toString());
+	}
+	
 	public static void print(String message) {
-		pane.setText(pane.getText()+message);
+		if(pane != null)
+			pane.setText(pane.getText()+message);
+	}
+	
+	public static void println(Object object) {
+		println(object.toString());
 	}
 	
 	public static void println(String message) {
-		pane.setText(pane.getText()+message+"\n");
+		if(pane != null)
+			pane.setText(pane.getText()+message+"\n");
 	}
 
 }
