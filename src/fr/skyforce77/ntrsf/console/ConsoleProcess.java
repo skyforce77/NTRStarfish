@@ -16,15 +16,15 @@ public class ConsoleProcess {
 		this.kpobj = kpobj;
 	}
 
-	public long getPid() {
+	public long getId() {
 		return pid;
 	}
 	
-	public String getPname() {
+	public String getName() {
 		return pname;
 	}
 	
-	public String getTid() {
+	public String getTitleId() {
 		return tid;
 	}
 	

@@ -20,7 +20,7 @@ class PluginLoader implements Listener {
 		for(Plugin p : manager.getPlugins()) {
 			if(!p.isEnabled()) {
 				for(String s : p.aimedGames()) {
-					if(s.equals(e.getProcess().getTid())) {
+					if(s.equalsIgnoreCase(e.getProcess().getTitleId())) {
 						p.setEnabled(true);
 						p.onEnable();
 					}
@@ -36,7 +36,7 @@ class PluginLoader implements Listener {
 				boolean hasAimed = false;
 				for(String s : p.aimedGames()) {
 					for(ConsoleProcess pr : Starfish.getConsoleManager().getProcesses()) {
-						if(pr.getTid().equals(s)) {
+						if(pr.getTitleId().equalsIgnoreCase(s)) {
 							hasAimed = true;
 						}
 					}

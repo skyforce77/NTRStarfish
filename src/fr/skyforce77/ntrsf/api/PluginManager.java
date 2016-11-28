@@ -34,6 +34,8 @@ public class PluginManager {
 		listeners = new LinkedHashMap<Class<? extends Event>, List<ListenerMethod>>();
 		commands = new LinkedHashMap<String, Command>();
 		
+		registerEvents(null, new PluginLoader(this));
+		
 		File pl = Starfish.getDataManager().getOrCreateDir("plugins");
 		for(File f : pl.listFiles()) {
 			if(f.getName().endsWith(".jar")) {
@@ -56,6 +58,7 @@ public class PluginManager {
             Class<?> cls = ClassLoader.getSystemClassLoader().loadClass(main);
             Plugin p = (Plugin) cls.newInstance();
             plugins.add(p);
+            System.out.println("Registered plugin "+f.getName());
         } catch (Exception e) {
             System.err.println("Can't launch " + f.getName() + " plugin.");
             e.printStackTrace();
