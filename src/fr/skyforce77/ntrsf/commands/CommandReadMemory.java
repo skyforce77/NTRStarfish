@@ -1,8 +1,10 @@
 package fr.skyforce77.ntrsf.commands;
 
+import fr.skyforce77.ntrsf.Starfish;
 import fr.skyforce77.ntrsf.api.Command;
+import fr.skyforce77.ntrsf.console.MemoryResponse;
+import fr.skyforce77.ntrsf.data.BinaryUtils;
 import fr.skyforce77.ntrsf.log.NTRLogger;
-import fr.skyforce77.ntrsf.network.NTRPacketReadMemory;
 
 public class CommandReadMemory extends Command {
 
@@ -26,11 +28,52 @@ public class CommandReadMemory extends Command {
 			long size = 0x100l;
 			if(args.length >= 2)
 				size = Long.decode(args[1]);
-			new NTRPacketReadMemory(pid, addr, size).send();
 			NTRLogger.println("Sent read request: {pid: "+pid+", addr: "+addr+", size: "+size+"}");
+			Starfish.getConsoleManager().requestMemory(pid, addr, size, new ReadMemory());
 		} else {
 			NTRLogger.println("Use: readmem <addr> [size] [pid]");
 		}
+	}
+	
+	private static class ReadMemory implements MemoryResponse {
+
+		@Override
+		public void readMemory(long pid, long address, byte[] data) {
+			int o = 0;
+			for(int i = 0; i < data.length/4; i++) {
+				if(i%4==0) {
+					NTRLogger.print(format(o+address)+" | ");
+				}
+				for(int j = 0; j < 4; j++) {
+					if(data.length > o+j) {
+						NTRLogger.print(format(data[o+j]));
+					}
+				}
+				o+=4;
+				if(i%4==3)
+					NTRLogger.println("");
+				else
+					NTRLogger.print(" ");
+			}
+			NTRLogger.println("");
+		}
+		
+		private static String format(byte data) {
+			String str = Integer.toHexString(Byte.toUnsignedInt(data));
+			if(str.length() == 1)
+				str = "0"+str;
+			return str;
+		}
+		
+		private static String format(long index) {
+			byte[] data = BinaryUtils.toUnsignedBytes(index);
+			String s = "";
+			for(byte b : data) {
+				s+=format(b);
+			}
+			return s;
+		}
+		
 	}
 
 }

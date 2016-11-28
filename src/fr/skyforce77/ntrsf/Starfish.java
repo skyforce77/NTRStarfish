@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import fr.skyforce77.ntrsf.api.PluginManager;
+import fr.skyforce77.ntrsf.commands.CommandClear;
 import fr.skyforce77.ntrsf.commands.CommandExit;
 import fr.skyforce77.ntrsf.commands.CommandHello;
 import fr.skyforce77.ntrsf.commands.CommandHelp;
@@ -82,7 +83,8 @@ public class Starfish {
 				new CommandHello(),
 				new CommandProcesses(),
 				new CommandReadMemory(),
-				new CommandExit()
+				new CommandExit(),
+				new CommandClear()
 		);
 		
 		new StarfishWindow();
