@@ -1,8 +1,6 @@
 package fr.skyforce77.ntrsf.commands;
 
-import fr.skyforce77.ntrsf.api.Command;
-
-public class CommandExit extends Command {
+public class CommandExit extends InternalCommand {
 
 	@Override
 	public String[] getLabel() {

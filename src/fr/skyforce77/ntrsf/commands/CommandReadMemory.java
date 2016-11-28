@@ -1,12 +1,11 @@
 package fr.skyforce77.ntrsf.commands;
 
 import fr.skyforce77.ntrsf.Starfish;
-import fr.skyforce77.ntrsf.api.Command;
 import fr.skyforce77.ntrsf.console.MemoryResponse;
 import fr.skyforce77.ntrsf.data.BinaryUtils;
 import fr.skyforce77.ntrsf.log.NTRLogger;
 
-public class CommandReadMemory extends Command {
+public class CommandReadMemory extends InternalCommand {
 
 	@Override
 	public String[] getLabel() {

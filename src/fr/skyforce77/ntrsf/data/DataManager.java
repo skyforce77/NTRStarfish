@@ -21,6 +21,13 @@ public class DataManager {
 		return new File(getDirectory(), file);
 	}
 	
+	public File getOrCreateDir(String directory) {
+		File f = getFile(directory);
+		if(!f.exists())
+			f.getParentFile().mkdirs();
+		return f;
+	}
+	
 	public File getDirectory() {
 		if(directory != null) {
 			return directory;

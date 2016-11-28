@@ -8,7 +8,7 @@ import fr.skyforce77.ntrsf.Starfish;
 import fr.skyforce77.ntrsf.api.Command;
 import fr.skyforce77.ntrsf.log.NTRLogger;
 
-public class CommandHelp extends Command {
+public class CommandHelp extends InternalCommand {
 
 	@Override
 	public String[] getLabel() {

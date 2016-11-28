@@ -1,12 +1,23 @@
 package fr.skyforce77.ntrsf.api;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
+import javax.management.IntrospectionException;
+
+import fr.skyforce77.ntrsf.Starfish;
 import fr.skyforce77.ntrsf.api.event.Event;
 import fr.skyforce77.ntrsf.api.event.EventHandler;
 import fr.skyforce77.ntrsf.api.event.Listener;
@@ -22,7 +33,47 @@ public class PluginManager {
 		plugins = new LinkedList<Plugin>();
 		listeners = new LinkedHashMap<Class<? extends Event>, List<ListenerMethod>>();
 		commands = new LinkedHashMap<String, Command>();
+		
+		File pl = Starfish.getDataManager().getOrCreateDir("plugins");
+		for(File f : pl.listFiles()) {
+			if(f.getName().endsWith(".jar")) {
+				initJavaPlugin(f);
+			}
+		}
 	}
+	
+	@SuppressWarnings("resource")
+	private void initJavaPlugin(File f) {
+		try {
+            addURLToSystemClassLoader(f.toURI().toURL());
+            JarFile jar = new JarFile(f.getPath());
+            JarEntry entry = jar.getJarEntry("main.txt");
+            if (entry == null) {
+                throw new FileNotFoundException("Jar does not contain plugin.yml");
+            }
+            BufferedReader rdr = new BufferedReader(new InputStreamReader(jar.getInputStream(entry)));
+            String main = rdr.readLine();
+            Class<?> cls = ClassLoader.getSystemClassLoader().loadClass(main);
+            Plugin p = (Plugin) cls.newInstance();
+            plugins.add(p);
+        } catch (Exception e) {
+            System.err.println("Can't launch " + f.getName() + " plugin.");
+            e.printStackTrace();
+        }
+	}
+	
+	private void addURLToSystemClassLoader(URL url) throws IntrospectionException {
+        URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        Class<URLClassLoader> classLoaderClass = URLClassLoader.class;
+        try {
+            Method method = classLoaderClass.getDeclaredMethod("addURL", new Class[]{URL.class});
+            method.setAccessible(true);
+            method.invoke(systemClassLoader, new Object[]{url});
+        } catch (Throwable t) {
+            t.printStackTrace();
+            throw new IntrospectionException("Error when adding url to system ClassLoader ");
+        }
+    }
 	
 	public List<Plugin> getPlugins() {
 		return plugins;
@@ -70,6 +121,13 @@ public class PluginManager {
 	public void registerCommands(Command... commands) {
 		for(Command command : commands) {
 			registerCommand(command);
+		}
+	}
+	
+	public void unregisterCommands(Plugin plugin) {
+		for(Entry<String, Command> entry : commands.entrySet()) {
+			if(entry.getValue().getPlugin().equals(plugin))
+				commands.remove(entry.getKey());
 		}
 	}
 	

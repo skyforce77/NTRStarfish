@@ -1,10 +1,9 @@
 package fr.skyforce77.ntrsf.commands;
 
-import fr.skyforce77.ntrsf.api.Command;
 import fr.skyforce77.ntrsf.network.NTRPacket;
 import fr.skyforce77.ntrsf.network.NTRPacketType;
 
-public class CommandHello extends Command {
+public class CommandHello extends InternalCommand {
 
 	@Override
 	public String[] getLabel() {

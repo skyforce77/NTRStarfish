@@ -1,11 +1,10 @@
 package fr.skyforce77.ntrsf.commands;
 
 import fr.skyforce77.ntrsf.Starfish;
-import fr.skyforce77.ntrsf.api.Command;
 import fr.skyforce77.ntrsf.console.ConsoleProcess;
 import fr.skyforce77.ntrsf.log.NTRLogger;
 
-public class CommandProcesses extends Command {
+public class CommandProcesses extends InternalCommand {
 
 	@Override
 	public String[] getLabel() {

@@ -1,9 +1,8 @@
 package fr.skyforce77.ntrsf.commands;
 
-import fr.skyforce77.ntrsf.api.Command;
 import fr.skyforce77.ntrsf.log.NTRLogger;
 
-public class CommandClear extends Command {
+public class CommandClear extends InternalCommand {
 
 	@Override
 	public String[] getLabel() {
