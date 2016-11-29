@@ -30,7 +30,7 @@ class PluginLoader implements Listener {
 	}
 	
 	@EventHandler
-	public void onProcessStarted(ProcessStoppedEvent e) {
+	public void onProcessStopped(ProcessStoppedEvent e) {
 		for(Plugin p : manager.getPlugins()) {
 			if(p.isEnabled()) {
 				boolean hasAimed = false;

@@ -68,7 +68,7 @@ public class CommandReadMemory extends InternalCommand {
 			byte[] data = BinaryUtils.toUnsignedBytes(index);
 			String s = "";
 			for(byte b : data) {
-				s+=format(b);
+				s = format(b)+s;
 			}
 			return s;
 		}

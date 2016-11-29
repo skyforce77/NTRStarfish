@@ -21,6 +21,16 @@ public class ConsoleManager {
 		return processes;
 	}
 	
+	public ConsoleProcess getProcess(String... tid) {
+		for(String s : tid) {
+			for(ConsoleProcess p : processes) {
+				if(p.getTitleId().equalsIgnoreCase(s))
+					return p;
+			}
+		}
+		return null;
+	}
+	
 	public void requestMemory(long pid, long address, long size, MemoryResponse reponse) {
 		NTRPacket packet = new NTRPacketReadMemory(pid, address, size);
 		Starfish.getNetworkManager().registerResponseListener(packet, new MemoryCallback(reponse));
