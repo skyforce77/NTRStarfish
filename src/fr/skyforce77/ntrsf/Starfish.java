@@ -10,6 +10,7 @@ import fr.skyforce77.ntrsf.commands.CommandHello;
 import fr.skyforce77.ntrsf.commands.CommandHelp;
 import fr.skyforce77.ntrsf.commands.CommandProcesses;
 import fr.skyforce77.ntrsf.commands.CommandReadMemory;
+import fr.skyforce77.ntrsf.commands.CommandThreads;
 import fr.skyforce77.ntrsf.console.ConsoleManager;
 import fr.skyforce77.ntrsf.data.DataManager;
 import fr.skyforce77.ntrsf.network.NetworkManager;
@@ -82,6 +83,7 @@ public class Starfish {
 				new CommandHelp(),
 				new CommandHello(),
 				new CommandProcesses(),
+				new CommandThreads(),
 				new CommandReadMemory(),
 				new CommandExit(),
 				new CommandClear()
