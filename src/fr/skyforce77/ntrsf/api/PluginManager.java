@@ -47,36 +47,36 @@ public class PluginManager {
 	@SuppressWarnings("resource")
 	private void initJavaPlugin(File f) {
 		try {
-            addURLToSystemClassLoader(f.toURI().toURL());
-            JarFile jar = new JarFile(f.getPath());
-            JarEntry entry = jar.getJarEntry("main.txt");
-            if (entry == null) {
-                throw new FileNotFoundException("Jar does not contain plugin.yml");
-            }
-            BufferedReader rdr = new BufferedReader(new InputStreamReader(jar.getInputStream(entry)));
-            String main = rdr.readLine();
-            Class<?> cls = ClassLoader.getSystemClassLoader().loadClass(main);
-            Plugin p = (Plugin) cls.newInstance();
-            plugins.add(p);
-            System.out.println("Registered plugin "+f.getName());
-        } catch (Exception e) {
-            System.err.println("Can't launch " + f.getName() + " plugin.");
-            e.printStackTrace();
-        }
+			addURLToSystemClassLoader(f.toURI().toURL());
+			JarFile jar = new JarFile(f.getPath());
+			JarEntry entry = jar.getJarEntry("main.txt");
+			if (entry == null) {
+			throw new FileNotFoundException("Jar does not contain main.txt");
+			}
+			BufferedReader rdr = new BufferedReader(new InputStreamReader(jar.getInputStream(entry)));
+			String main = rdr.readLine();
+			Class<?> cls = ClassLoader.getSystemClassLoader().loadClass(main);
+			Plugin p = (Plugin) cls.newInstance();
+			plugins.add(p);
+			System.out.println("Registered plugin "+f.getName());
+		} catch (Exception e) {
+			System.err.println("Can't launch " + f.getName() + " plugin.");
+			e.printStackTrace();
+		}
 	}
 	
 	private void addURLToSystemClassLoader(URL url) throws IntrospectionException {
-        URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        Class<URLClassLoader> classLoaderClass = URLClassLoader.class;
-        try {
-            Method method = classLoaderClass.getDeclaredMethod("addURL", new Class[]{URL.class});
-            method.setAccessible(true);
-            method.invoke(systemClassLoader, new Object[]{url});
-        } catch (Throwable t) {
-            t.printStackTrace();
-            throw new IntrospectionException("Error when adding url to system ClassLoader ");
-        }
-    }
+		URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+		Class<URLClassLoader> classLoaderClass = URLClassLoader.class;
+		try {
+			Method method = classLoaderClass.getDeclaredMethod("addURL", new Class[]{URL.class});
+			method.setAccessible(true);
+			method.invoke(systemClassLoader, new Object[]{url});
+		} catch (Throwable t) {
+			t.printStackTrace();
+			throw new IntrospectionException("Error when adding url to system ClassLoader ");
+		}
+	}
 	
 	public List<Plugin> getPlugins() {
 		return plugins;
