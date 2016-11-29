@@ -15,6 +15,7 @@ import fr.skyforce77.ntrsf.data.CosmicBuffer;
 import fr.skyforce77.ntrsf.network.NTRPacket;
 import fr.skyforce77.ntrsf.network.NTRPacketReadMemory;
 import fr.skyforce77.ntrsf.network.NTRPacketType;
+import fr.skyforce77.ntrsf.network.NTRPacketWriteMemory;
 
 public class ConsoleManager {
 	
@@ -42,6 +43,14 @@ public class ConsoleManager {
 		NTRPacket packet = new NTRPacketReadMemory(pid, address, size);
 		Starfish.getNetworkManager().registerResponseListener(packet, new MemoryCallback(reponse));
 		packet.send();
+	}
+	
+	public void writeMemory(long pid, long address, byte[] data) {
+		new NTRPacketWriteMemory(pid, address, data).send();
+	}
+	
+	public void writeMemory(long pid, long address, CosmicBuffer data) {
+		new NTRPacketWriteMemory(pid, address, data).send();
 	}
 
 	public void updateProcesses(NTRPacket packet, String ret) {
