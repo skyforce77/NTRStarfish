@@ -96,6 +96,7 @@ public class ConsoleManager {
 		InputStream is = new FileInputStream(file);
 		CosmicBuffer buffer = new CosmicBuffer();
 		buffer.fill(is, is.available());
+		is.close();
 		setFile(path, buffer);
 	}
 	
