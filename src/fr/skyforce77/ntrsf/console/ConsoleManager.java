@@ -1,13 +1,20 @@
 package fr.skyforce77.ntrsf.console;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 
 import fr.skyforce77.ntrsf.Starfish;
 import fr.skyforce77.ntrsf.api.event.process.ProcessStartedEvent;
 import fr.skyforce77.ntrsf.api.event.process.ProcessStoppedEvent;
+import fr.skyforce77.ntrsf.data.CosmicBuffer;
 import fr.skyforce77.ntrsf.network.NTRPacket;
 import fr.skyforce77.ntrsf.network.NTRPacketReadMemory;
+import fr.skyforce77.ntrsf.network.NTRPacketType;
 
 public class ConsoleManager {
 	
@@ -68,6 +75,34 @@ public class ConsoleManager {
 		}
 		
 		processes = list;
+	}
+	
+	public void setFile(String path, CosmicBuffer file) {
+		byte[] filename = new byte[0x200];
+		byte[] nameBytes = path.getBytes(Charset.forName("UTF-8"));
+		if(nameBytes.length > filename.length) {
+			throw new IllegalArgumentException("Path exceed 512 characters");
+		}
+		System.arraycopy(nameBytes, 0, filename, 0, nameBytes.length);
+		
+		CosmicBuffer buffer = new CosmicBuffer();
+		buffer.fill(filename);
+		buffer.fill(file);
+		
+		new NTRPacket(NTRPacketType.SAVE_FILE, null, buffer).send();
+	}
+	
+	public void setFile(String path, File file) throws IOException {
+		InputStream is = new FileInputStream(file);
+		CosmicBuffer buffer = new CosmicBuffer();
+		buffer.fill(is, is.available());
+		setFile(path, buffer);
+	}
+	
+	public void setFile(String path, InputStream file) throws IOException {
+		CosmicBuffer buffer = new CosmicBuffer();
+		buffer.fill(file, file.available());
+		setFile(path, buffer);
 	}
 
 }

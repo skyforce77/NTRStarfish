@@ -36,6 +36,10 @@ public class CosmicBuffer {
 		}
 	}
 	
+	List<byte[]> getParts() {
+		return parts;
+	}
+
 	public void fill(InputStream stream, int length) {
 		int o = 0;
 		while(o < length) {
@@ -55,6 +59,22 @@ public class CosmicBuffer {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public void fill(byte[] data) {
+		ByteArrayInputStream stream = new ByteArrayInputStream(data);
+		fill(stream, data.length);
+		try {
+			stream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void fill(CosmicBuffer data) {
+		for(byte[] array : data.getParts()) {
+			fill(array);
 		}
 	}
 	
