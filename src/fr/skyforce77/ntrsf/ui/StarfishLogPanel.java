@@ -34,6 +34,7 @@ public class StarfishLogPanel extends JPanel {
 		setLayout(layout);
 		
 		area = new JTextArea();
+		area.setEditable(false);
 		NTRLogger.setArea(area);
 		
 		field = new JTextField();
